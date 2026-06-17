@@ -136,7 +136,13 @@ button.danger:hover {
   margin-bottom: 12px;
 }
 
-.table-toolbar label {
+.toolbar-actions {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+
+.toolbar-actions label {
   width: min(360px, 100%);
 }
 
@@ -180,6 +186,7 @@ td.empty {
   }
 
   .table-toolbar,
+  .toolbar-actions,
   .actions {
     align-items: stretch;
     flex-direction: column;

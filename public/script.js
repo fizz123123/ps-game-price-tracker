@@ -1,6 +1,7 @@
 const form = document.querySelector('#price-form');
 const tableBody = document.querySelector('#price-table-body');
 const keywordInput = document.querySelector('#keyword');
+const crawlButton = document.querySelector('#crawl-button');
 const formMessage = document.querySelector('#form-message');
 const tableMessage = document.querySelector('#table-message');
 
@@ -174,7 +175,35 @@ async function deleteRecord(id) {
   }
 }
 
+async function importPsStoreRecords() {
+  try {
+    crawlButton.disabled = true;
+    setMessage(tableMessage, '匯入 PS Store 新上市遊戲中...');
+
+    const response = await fetch('/api/crawl/ps-store', {
+      method: 'POST',
+    });
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result?.error || '匯入失敗');
+    }
+
+    setMessage(
+      tableMessage,
+      `匯入完成：新增 ${result.importedCount} 筆，略過 ${result.skippedCount} 筆`,
+      'success'
+    );
+    await loadRecords();
+  } catch (error) {
+    setMessage(tableMessage, error.message || '匯入失敗', 'error');
+  } finally {
+    crawlButton.disabled = false;
+  }
+}
+
 form.addEventListener('submit', createRecord);
 keywordInput.addEventListener('input', loadRecords);
+crawlButton.addEventListener('click', importPsStoreRecords);
 
 loadRecords();

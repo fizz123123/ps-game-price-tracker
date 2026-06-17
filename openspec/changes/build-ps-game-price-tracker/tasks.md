@@ -55,12 +55,12 @@
 
 ## 8. Optional Crawler
 
-- [ ] 8.1 After the core MVP works, optionally add `POST /api/crawl/ps-store`.
-- [ ] 8.2 Ensure the optional crawler only reads a small amount of public PlayStation Store Taiwan new-release data.
-- [ ] 8.3 Limit the optional crawler demo to about 3 to 5 records.
-- [ ] 8.4 Ensure the optional crawler does not use PlayStation internal APIs.
-- [ ] 8.5 Ensure the optional crawler avoids large-volume or repeated requests.
-- [ ] 8.6 Set `data_type` to `crawler` for records created by the optional crawler.
+- [x] 8.1 After the core MVP works, optionally add `POST /api/crawl/ps-store`.
+- [x] 8.2 Ensure the optional crawler only reads a small amount of public PlayStation Store Taiwan new-release data.
+- [x] 8.3 Limit the optional crawler demo to about 3 to 5 records.
+- [x] 8.4 Ensure the optional crawler does not use PlayStation internal APIs.
+- [x] 8.5 Ensure the optional crawler avoids large-volume or repeated requests.
+- [x] 8.6 Set `data_type` to `crawler` for records created by the optional crawler.
 
 ## 9. Quality Fixes
 

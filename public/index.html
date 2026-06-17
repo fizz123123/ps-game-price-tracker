@@ -73,10 +73,13 @@
     <section class="panel">
       <div class="table-toolbar">
         <h2>價格資料</h2>
-        <label>
-          搜尋遊戲名稱
-          <input type="search" id="keyword" placeholder="輸入關鍵字">
-        </label>
+        <div class="toolbar-actions">
+          <button type="button" id="crawl-button">匯入 PS Store 新上市遊戲</button>
+          <label>
+            搜尋遊戲名稱
+            <input type="search" id="keyword" placeholder="輸入關鍵字">
+          </label>
+        </div>
       </div>
 
       <p id="table-message" class="message" role="status"></p>

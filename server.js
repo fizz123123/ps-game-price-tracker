@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const db = require('./database');
+const { importLatestPsStorePrices } = require('./crawler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -172,6 +173,15 @@ app.delete('/api/prices/:id', (req, res) => {
 
     res.status(204).send();
   });
+});
+
+app.post('/api/crawl/ps-store', async (req, res) => {
+  try {
+    const result = await importLatestPsStorePrices();
+    res.json(result);
+  } catch (err) {
+    res.status(502).json({ error: 'Failed to import PlayStation Store Taiwan prices' });
+  }
 });
 
 app.listen(PORT, HOST, () => {

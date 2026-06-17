@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PS首發價格追蹤</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1>PS首發價格追蹤</h1>
+    <p>從 PlayStation 遊戲上市價格，觀察玩家娛樂消費的變化。</p>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <h2>新增價格資料</h2>
+      <form id="price-form" novalidate>
+        <div class="field-grid">
+          <label>
+            記錄日期 *
+            <input type="date" id="record_date" name="record_date" required>
+          </label>
+
+          <label>
+            上市日期
+            <input type="date" id="release_date" name="release_date">
+          </label>
+
+          <label>
+            遊戲名稱 *
+            <input type="text" id="game_name" name="game_name" required>
+          </label>
+
+          <label>
+            平台 *
+            <select id="platform" name="platform" required>
+              <option value="">請選擇</option>
+              <option value="PS5">PS5</option>
+              <option value="PS4">PS4</option>
+              <option value="PS4 / PS5">PS4 / PS5</option>
+            </select>
+          </label>
+
+          <label>
+            版本
+            <input type="text" id="edition" name="edition" placeholder="標準版、豪華版">
+          </label>
+
+          <label>
+            價格 *
+            <input type="number" id="price" name="price" min="1" step="1" required>
+          </label>
+
+          <label>
+            資料來源
+            <input type="text" id="source" name="source" placeholder="PlayStation Store Taiwan">
+          </label>
+
+          <label class="field-wide">
+            備註
+            <textarea id="note" name="note" rows="3"></textarea>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="submit">新增資料</button>
+          <p id="form-message" class="message" role="status"></p>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel">
+      <div class="table-toolbar">
+        <h2>價格資料</h2>
+        <label>
+          搜尋遊戲名稱
+          <input type="search" id="keyword" placeholder="輸入關鍵字">
+        </label>
+      </div>
+
+      <p id="table-message" class="message" role="status"></p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>上市日期</th>
+              <th>記錄日期</th>
+              <th>遊戲名稱</th>
+              <th>平台</th>
+              <th>版本</th>
+              <th>價格</th>
+              <th>來源</th>
+              <th>資料類型</th>
+              <th>備註</th>
+              <th>建立時間</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="price-table-body">
+            <tr>
+              <td colspan="12">載入中...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

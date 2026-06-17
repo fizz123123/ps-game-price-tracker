@@ -1,0 +1,187 @@
+:root {
+  color-scheme: light;
+  font-family: Arial, "Noto Sans TC", sans-serif;
+  color: #202124;
+  background: #f5f7fb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+.site-header {
+  padding: 32px 24px 20px;
+  background: #ffffff;
+  border-bottom: 1px solid #dde3ee;
+}
+
+.site-header h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+}
+
+.site-header p {
+  margin: 0;
+  color: #5f6673;
+}
+
+.layout {
+  width: min(1180px, calc(100% - 32px));
+  margin: 24px auto 48px;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid #dde3ee;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  margin: 0 0 16px;
+  font-size: 20px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: #3b4250;
+}
+
+.field-wide {
+  grid-column: span 2;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #c5ccd8;
+  border-radius: 6px;
+  padding: 10px 12px;
+  background: #ffffff;
+  color: #202124;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 14px;
+  background: #1f6feb;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #185abc;
+}
+
+button.danger {
+  background: #c9352b;
+}
+
+button.danger:hover {
+  background: #a82a22;
+}
+
+.message {
+  min-height: 20px;
+  margin: 0;
+  color: #5f6673;
+}
+
+.message.error {
+  color: #b42318;
+}
+
+.message.success {
+  color: #176b36;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.table-toolbar label {
+  width: min(360px, 100%);
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1120px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #e4e8f0;
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+  font-size: 14px;
+}
+
+th {
+  background: #f2f5fa;
+  color: #3b4250;
+  font-weight: 700;
+}
+
+td.empty {
+  text-align: center;
+  color: #6b7280;
+}
+
+@media (max-width: 860px) {
+  .field-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field-wide {
+    grid-column: span 1;
+  }
+
+  .table-toolbar,
+  .actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

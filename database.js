@@ -1,7 +1,17 @@
+const fs = require('fs');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
 
-const dbPath = path.join(__dirname, 'prices.db');
+const isAzure = Boolean(process.env.WEBSITE_SITE_NAME);
+const azureDataDir = '/home/data';
+const dbPath = isAzure
+  ? path.join(azureDataDir, 'prices.db')
+  : path.join(__dirname, 'prices.db');
+
+if (isAzure && !fs.existsSync(azureDataDir)) {
+  fs.mkdirSync(azureDataDir, { recursive: true });
+}
+
 const db = new sqlite3.Database(dbPath);
 
 db.serialize(() => {

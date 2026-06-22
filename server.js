@@ -5,7 +5,8 @@ const { importLatestPsStorePrices } = require('./crawler');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST || '127.0.0.1';
+const isAzure = Boolean(process.env.WEBSITE_SITE_NAME);
+const HOST = process.env.HOST || (isAzure ? '0.0.0.0' : '127.0.0.1');
 
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));

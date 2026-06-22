@@ -66,6 +66,17 @@ Open the app:
 http://localhost:3000
 ```
 
+## Azure App Service
+
+The app can run on Azure App Service F1 with the existing `npm start` command.
+
+- Azure provides the runtime port through `process.env.PORT`.
+- When `WEBSITE_SITE_NAME` is present, SQLite data is stored at `/home/data/prices.db`.
+- Local development continues to use the project-level `prices.db`.
+- `node_modules/`, local SQLite database files, and `.env` should stay out of Git.
+
+This setup keeps the project on SQLite for a small demo/personal tracker. It does not add CI/CD or migrate data to a cloud database.
+
 ## API
 
 | Method | Endpoint | Description |

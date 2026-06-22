@@ -14,7 +14,7 @@
 
   <main class="layout">
     <section class="panel">
-      <h2>新增價格資料</h2>
+      <h2 id="form-title">新增價格資料</h2>
       <form id="price-form" novalidate>
         <div class="field-grid">
           <label>
@@ -64,10 +64,19 @@
         </div>
 
         <div class="actions">
-          <button type="submit">新增資料</button>
+          <button type="submit" id="submit-button">新增資料</button>
+          <button type="button" id="cancel-edit-button" class="secondary" hidden>取消編輯</button>
           <p id="form-message" class="message" role="status"></p>
         </div>
       </form>
+    </section>
+
+    <section class="panel">
+      <h2>首發價格趨勢</h2>
+      <p id="chart-message" class="message" role="status"></p>
+      <div class="chart-wrap">
+        <canvas id="price-trend-chart" aria-label="首發價格趨勢折線圖"></canvas>
+      </div>
     </section>
 
     <section class="panel">
@@ -112,6 +121,7 @@
     </section>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,43 +1,35 @@
 # PS首發價格追蹤
 
-從 PlayStation 遊戲上市價格，觀察玩家娛樂消費的變化
+從 PlayStation 遊戲上市價格，觀察玩家娛樂消費的變化。
 
-## 專題介紹
+PS首發價格追蹤是一個簡單的遊戲價格紀錄網站。使用者可以記錄 PlayStation 遊戲的上市日期、紀錄日期、平台、版本、價格與資料來源，並透過表格搜尋與折線圖觀察不同遊戲之間的首發價格變化。
 
-本專題是 Web 程式設計課程的期末作品，主題為:PS首發價格追蹤
+這個專案以「玩家角度的娛樂消費觀測」為核心，不是官方 CPI，也不追求完整市場統計，而是用輕量的方式保存與比較自己關心的遊戲價格資料。
 
-使用者可以記錄 PlayStation 平台遊戲的首發價格或目前價格，並透過表格與搜尋功能觀察自己關心的遊戲價格變化。
+## Features
 
+- 新增、編輯、刪除 PS 遊戲價格紀錄
+- 依遊戲名稱關鍵字搜尋資料
+- 使用 SQLite 保存資料
+- 以表格呈現完整價格紀錄
+- 以 Chart.js 折線圖呈現有上市日期資料的價格趨勢
+- 手動新增資料時由後端標記為 `manual`
+- 可選擇從 PlayStation Store Taiwan 公開頁面匯入少量新上市遊戲價格
+- 爬蟲匯入資料會標記為 `crawler`，並避免同一天同遊戲重複匯入
 
-## 功能介紹
+## Tech Stack
 
-### 基本功能
-
-- 手動新增 PS 遊戲價格資料
-- 查詢所有遊戲價格紀錄
-- 依遊戲名稱關鍵字搜尋
-- 刪除價格紀錄
-- 使用 SQLite 儲存資料，重新整理頁面後資料仍會保留
-- 前端使用表格呈現價格紀錄
-- 前端透過 `fetch` 呼叫後端 API
-- 從 PlayStation Store Taiwan 公開頁面匯入少量新上市遊戲價格
-- 爬蟲資料會標記為 `crawler`
-- 手動新增的資料會標記為 `manual`
-- 避免重複匯入同一天、同遊戲名稱的爬蟲資料
-
-## 使用技術
-
-| 類別 | 技術 |
+| Part | Tech |
 |---|---|
 | Frontend | HTML, CSS, JavaScript |
+| Chart | Chart.js |
 | Backend | Node.js, Express.js |
 | Database | SQLite |
-| API 串接 | Fetch API |
+| API | Fetch API |
 | Crawler | Axios, Cheerio |
 | Spec / SDD | OpenSpec |
-| Version Control | Git, GitHub |
 
-## 專案結構
+## Project Structure
 
 ```text
 ps-game-price-tracker/
@@ -51,43 +43,60 @@ ps-game-price-tracker/
 │   ├── style.css
 │   └── script.js
 ├── openspec/
-│   ├── specs/
-│   ├── changes/
-│   └── archive/
-├── .gitignore
 └── README.md
 ```
 
-## API 規格
+## Getting Started
 
-| Method | Endpoint | 說明 |
+Install dependencies:
+
+```bash
+npm install
+```
+
+Start the server:
+
+```bash
+npm start
+```
+
+Open the app:
+
+```text
+http://localhost:3000
+```
+
+## API
+
+| Method | Endpoint | Description |
 |---|---|---|
-| GET | `/api/health` | 檢查後端伺服器是否正常 |
-| GET | `/api/prices` | 查詢所有價格紀錄 |
-| GET | `/api/prices?keyword=` | 依遊戲名稱關鍵字搜尋 |
-| POST | `/api/prices` | 新增一筆遊戲價格資料 |
-| DELETE | `/api/prices/:id` | 刪除指定價格資料 |
-| POST | `/api/crawl/ps-store` | 匯入 PS Store 新上市遊戲價格 |
+| GET | `/api/health` | Check API status |
+| GET | `/api/prices` | Get all price records |
+| GET | `/api/prices?keyword=` | Search records by game name |
+| POST | `/api/prices` | Create a price record |
+| PUT | `/api/prices/:id` | Update a price record |
+| DELETE | `/api/prices/:id` | Delete a price record |
+| POST | `/api/crawl/ps-store` | Import a few latest PS Store Taiwan records |
 
-## 資料表設計
+## Data Model
 
-本專題使用 SQLite，主要資料表為 `game_prices`。
+The main SQLite table is `game_prices`.
 
-| 欄位 | 說明 |
+| Field | Description |
 |---|---|
-| `id` | 自動產生的資料 ID |
-| `release_date` | 遊戲上市日期，可選填 |
-| `record_date` | 價格紀錄日期 |
-| `game_name` | 遊戲名稱 |
-| `platform` | 平台，例如 PS5 / PS4 |
-| `edition` | 版本，例如標準版、豪華版 |
-| `price` | 遊戲價格 |
-| `source` | 資料來源 |
-| `data_type` | 資料類型，`manual` 或 `crawler` |
-| `note` | 備註 |
-| `created_at` | 建立時間 |
+| `id` | Auto-generated record ID |
+| `release_date` | Game release date, optional |
+| `record_date` | Price record date |
+| `game_name` | Game title |
+| `platform` | Platform, such as PS5 or PS4 |
+| `edition` | Edition name |
+| `price` | Price in TWD |
+| `source` | Data source |
+| `data_type` | `manual` or `crawler` |
+| `note` | Optional note |
+| `created_at` | Created timestamp |
 
-## 新增資料格式範例
+## Example Request
 
 ```json
 {
@@ -98,25 +107,24 @@ ps-game-price-tracker/
   "edition": "標準版",
   "price": 1990,
   "source": "PlayStation Store Taiwan",
-  "note": "測試資料"
+  "note": "首發價格紀錄"
 }
 ```
 
-手動新增資料時，後端會自動將 `data_type` 設為 `manual`。
+`data_type` is controlled by the backend. Manual records are saved as `manual`; crawler records are saved as `crawler`.
 
-## OpenSpec / SDD 開發紀錄
+## Crawler Notes
 
-本專題使用 OpenSpec / SDD 的方式進行規格化開發。
+The optional crawler imports a small number of publicly visible records from PlayStation Store Taiwan for demo use.
 
-主要流程：
+- It only reads public page content.
+- It does not use PlayStation internal APIs.
+- It does not call private endpoints such as `/chihiro-api/` or `/event/batch`.
+- It limits each import to a small number of records.
+- It skips records that cannot be parsed into a valid NT$ price.
 
-1. 先定義專題目的與功能範圍
-2. 撰寫 OpenSpec proposal、spec、design、tasks
-3. 依照 tasks 分階段完成後端、資料庫、前端與爬蟲功能
-4. 完成功能後進行驗收與 archive
+## Development Notes
 
-相關文件位於：
-
-```text
-openspec/
-```
+- OpenSpec files are kept in `openspec/`.
+- `node_modules/` should not be committed.
+- Local SQLite database files such as `prices.db` should not be committed.

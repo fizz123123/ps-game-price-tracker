@@ -58,7 +58,7 @@ function isDateString(value) {
   return /^\d{4}-\d{2}-\d{2}$/.test(value);
 }
 
-app.post('/api/prices', (req, res) => {
+function normalizePricePayload(body) {
   const {
     release_date,
     record_date,
@@ -68,7 +68,7 @@ app.post('/api/prices', (req, res) => {
     price,
     source,
     note,
-  } = req.body;
+  } = body;
 
   const normalizedRecordDate = record_date === undefined || record_date === null
     ? ''
@@ -97,25 +97,44 @@ app.post('/api/prices', (req, res) => {
   const numericPrice = Number(price);
 
   if (missingFields.length > 0) {
-    res.status(400).json({ error: `Missing required fields: ${missingFields.join(', ')}` });
-    return;
+    return { error: `Missing required fields: ${missingFields.join(', ')}` };
   }
 
   if (!Number.isFinite(numericPrice) || numericPrice <= 0 || !Number.isInteger(numericPrice)) {
-    res.status(400).json({ error: 'Price must be an integer greater than 0' });
-    return;
+    return { error: 'Price must be an integer greater than 0' };
   }
 
   if (!isDateString(normalizedRecordDate)) {
-    res.status(400).json({ error: 'record_date must use YYYY-MM-DD format' });
-    return;
+    return { error: 'record_date must use YYYY-MM-DD format' };
   }
 
   if (normalizedReleaseDate && !isDateString(normalizedReleaseDate)) {
-    res.status(400).json({ error: 'release_date must use YYYY-MM-DD format' });
+    return { error: 'release_date must use YYYY-MM-DD format' };
+  }
+
+  return {
+    data: {
+      release_date: normalizedReleaseDate,
+      record_date: normalizedRecordDate,
+      game_name: normalizedGameName,
+      platform: normalizedPlatform,
+      edition: normalizedEdition,
+      price: numericPrice,
+      source: normalizedSource,
+      note: normalizedNote,
+    },
+  };
+}
+
+app.post('/api/prices', (req, res) => {
+  const normalized = normalizePricePayload(req.body);
+
+  if (normalized.error) {
+    res.status(400).json({ error: normalized.error });
     return;
   }
 
+  const record = normalized.data;
   const sql = `
     INSERT INTO game_prices (
       release_date,
@@ -132,14 +151,14 @@ app.post('/api/prices', (req, res) => {
   `;
 
   const params = [
-    normalizedReleaseDate,
-    normalizedRecordDate,
-    normalizedGameName,
-    normalizedPlatform,
-    normalizedEdition,
-    numericPrice,
-    normalizedSource,
-    normalizedNote,
+    record.release_date,
+    record.record_date,
+    record.game_name,
+    record.platform,
+    record.edition,
+    record.price,
+    record.source,
+    record.note,
   ];
 
   db.run(sql, params, function insertRecord(err) {
@@ -155,6 +174,63 @@ app.post('/api/prices', (req, res) => {
       }
 
       res.status(201).json(row);
+    });
+  });
+});
+
+app.put('/api/prices/:id', (req, res) => {
+  const normalized = normalizePricePayload(req.body);
+
+  if (normalized.error) {
+    res.status(400).json({ error: normalized.error });
+    return;
+  }
+
+  const record = normalized.data;
+  const sql = `
+    UPDATE game_prices
+    SET
+      release_date = ?,
+      record_date = ?,
+      game_name = ?,
+      platform = ?,
+      edition = ?,
+      price = ?,
+      source = ?,
+      note = ?
+    WHERE id = ?
+  `;
+
+  const params = [
+    record.release_date,
+    record.record_date,
+    record.game_name,
+    record.platform,
+    record.edition,
+    record.price,
+    record.source,
+    record.note,
+    req.params.id,
+  ];
+
+  db.run(sql, params, function updateRecord(err) {
+    if (err) {
+      res.status(500).json({ error: 'Failed to update price record' });
+      return;
+    }
+
+    if (this.changes === 0) {
+      res.status(404).json({ error: 'Price record not found' });
+      return;
+    }
+
+    db.get('SELECT * FROM game_prices WHERE id = ?', [req.params.id], (selectErr, row) => {
+      if (selectErr) {
+        res.status(500).json({ error: 'Price record was updated but could not be loaded' });
+        return;
+      }
+
+      res.json(row);
     });
   });
 });
